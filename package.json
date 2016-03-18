@@ -1,7 +1,7 @@
 {
   "name": "node-logger",
   "version": "1.0.0",
-  "description": "",
+  "description": "Console log wrapper to ensure consistent logs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/zesty-io/node-logger.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Stuart Runyan",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/zesty-io/node-logger/issues"
   },
