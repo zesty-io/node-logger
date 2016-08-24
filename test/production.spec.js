@@ -1,8 +1,11 @@
 'use strict'
 
 let test = require('ava')
-let log = require('./index')
 let intercept = require('intercept-stdout')
+let parse = require('./helpers/parse-log')
+let log = require('../index')
+
+process.env.NODE_ENV = 'production'
 
 test.beforeEach((t) => {
   t.context.captured = ''
@@ -18,36 +21,48 @@ test.afterEach.always((t) => {
 
 test('log.info follows message pattern', (t) => {
   log.info('log.info')
-  t.regex(t.context.captured, /INFO\s\d+\s"log.info"/)
+
+  let data = parse(t.context.captured)
+
+  t.is(data.type, 'INFO')
+  t.is(data.message, 'log.info')
+  t.is(data.data, null)
 })
 
 test('log.info data is an object', (t) => {
   log.info('log.info', {test: true})
 
-  // Extract logged data
-  let data = /(\{.*\})/.exec(t.context.captured)
-  let json = JSON.parse(data[0])
+  let data = parse(t.context.captured)
 
-  // Test logged object is an object
-  t.is(json.test, true)
-
-  // Should not be wrapped in an array
-  // this covers the legacy case where log
-  // wrapped everything in an array
-  t.is(Array.isArray(json), false)
+  t.is(data.data.test, true)
 })
 
 test('log.debug follows message pattern', (t) => {
   log.debug('log.debug')
-  t.regex(t.context.captured, /DEBUG\s\d+\s"log.debug"/)
+
+  let data = parse(t.context.captured)
+
+  t.is(data.type, 'DEBUG')
+  t.is(data.message, 'log.debug')
+  t.is(data.data, null)
 })
 
 test('log.warn follows message pattern', (t) => {
   log.warn('log.warn')
-  t.regex(t.context.captured, /WARN\s\d+\s"log.warn"/)
+
+  let data = parse(t.context.captured)
+
+  t.is(data.type, 'WARN')
+  t.is(data.message, 'log.warn')
+  t.is(data.data, null)
 })
 
 test('log.error follows message pattern', (t) => {
   log.error('log.error')
-  t.regex(t.context.captured, /ERROR\s\d+\s"log.error"/)
+
+  let data = parse(t.context.captured)
+
+  t.is(data.type, 'ERROR')
+  t.is(data.message, 'log.error')
+  t.is(data.data, null)
 })
