@@ -9,7 +9,7 @@ module.exports = {
 
 function logFactory(type) {
   return function (message, data = null) {
-    const epoch = Math.round(new Date().getTime() / 1000.0)
+    const epoch = new Date().getTime()
     let log = {type, message, epoch, data}
 
     if (process.env.NODE_ENV === 'production') {
